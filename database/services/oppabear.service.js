@@ -7,8 +7,8 @@ const csvtojson = require("csvtojson");
 const { logging } = require("../../utils/logging");
 
 const baseIpfs =
-  "ipfs://bafybeid5uiefrwxejqqii6bemh2tsos5hzqxrzl5ieyulg26ugmm2eq26a";
-// "ipfs://bafybeiefz3zwhro2v25yug5f6zhodjmezhpckthaoof4vzenlhx2l35vra";
+  // "ipfs://bafybeid5uiefrwxejqqii6bemh2tsos5hzqxrzl5ieyulg26ugmm2eq26a";
+  "ipfs://bafybeiefz3zwhro2v25yug5f6zhodjmezhpckthaoof4vzenlhx2l35vra";
 
 const migrate = async () => {
   // OppaGen1.drop();

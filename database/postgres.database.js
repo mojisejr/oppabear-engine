@@ -10,7 +10,7 @@ const {
 } = process.env;
 
 const sequeilze = new Sequelize(postgres_db, postgres_user, postgres_pwd, {
-  host: production === "PROD" ? "host.docker.internal" : "localhost",
+  host: production === "PROD" ? "host.docker.internal" : "188.166.65.114",
   port: 5433,
   dialect: "postgres",
   logging: false,
