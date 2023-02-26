@@ -8,10 +8,10 @@ const labAbi = require("./labs.abi");
 const config = {
   providerUrl:
     "https://opt-goerli.g.alchemy.com/v2/FJoUwTBR1cpQiyK2gzrELLoP1ZsAmatQ",
-  hostAddr: "0x9C4Fcb88f54708133242933325884106DB7B0756",
-  mutantAddr: "0xC7ffE5f33F162Ef9E637d1404fDF805CEAa6E859",
-  stimulusAddr: "0x671120fe7a6Ae84d0FFbA42013Bf754151E4FaC7",
-  labAddr: "0x8537d7FEd909e2bFd08Ce584d7D7a7edaB77c498",
+  hostAddr: "0xEBcEF7c7cb28eC904Eb69E9327cE0a465BB68A49",
+  mutantAddr: "0xC08efD523a3F1a238a09Bf84a16725de6725d9F5",
+  stimulusAddr: "0x74c68931B655636EC1C438616E3eB59231133D2E",
+  labAddr: "0x8b3Ea677f28DCF6032279885DFbeBe577C2e0bC5",
 };
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
