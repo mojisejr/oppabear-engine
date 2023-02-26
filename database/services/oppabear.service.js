@@ -395,7 +395,14 @@ const getOneRandom = async () => {
 const runV2 = async (oppaTokenId, serum) => {
   let gen1Input = await getGen1ById(oppaTokenId);
   let gen2Output = null;
+  let mintedOut = (await getAllUnusedGen2()).length <= 0;
+  //TODO: detect MINTED OUT and return
+  if (mintedOut) {
+    return "MINTED_OUT";
+  }
+
   if (gen1Input.rarity == 4) return;
+
   switch (serum) {
     case 1:
       logging(`=== oppatoken ${oppaTokenId} : with serum ${serum} ===\n`);
@@ -420,63 +427,63 @@ const runV2 = async (oppaTokenId, serum) => {
   }
 };
 
-const testV2 = async () => {
-  let len = 1501;
-  let serumV2 = [1, 2, 3];
-  let maxSerum = [600, 300, 100];
-  let lv1Count = 0;
-  let lv2Count = 0;
-  let lv3Count = 0;
-  let total = 1000;
-  let now = 0;
-  let tokenId = 1;
-  while (now < total) {
-    console.log("round: ", now);
-    let rand = Math.floor(Math.random() * 9999 + lv1Count) % 3;
-    if (rand == 0 && lv1Count < maxSerum[0]) {
-      lv1Count++;
-      await runV2(tokenId, serumV2[0]);
-      tokenId++;
-    } else if (rand == 1 && lv2Count < maxSerum[1]) {
-      lv2Count++;
-      await runV2(tokenId, serumV2[1]);
-      tokenId++;
-    } else if (rand == 2 && lv3Count < maxSerum[2]) {
-      lv3Count++;
-      await runV2(tokenId, serumV2[2]);
-      tokenId++;
-    } else {
-      tokenId++;
-      lv1Count == maxSerum[0]
-        ? await runV2(tokenId, serumV2[1])
-        : await runV2(tokenId, serumV2[0]);
-      lv2Count == maxSerum[1]
-        ? await runV2(tokenId, serumV2[2])
-        : await runV2(tokenId, serumV2[1]);
+// const testV2 = async () => {
+//   let len = 1501;
+//   let serumV2 = [1, 2, 3];
+//   let maxSerum = [600, 300, 100];
+//   let lv1Count = 0;
+//   let lv2Count = 0;
+//   let lv3Count = 0;
+//   let total = 1000;
+//   let now = 0;
+//   let tokenId = 1;
+//   while (now < total) {
+//     console.log("round: ", now);
+//     let rand = Math.floor(Math.random() * 9999 + lv1Count) % 3;
+//     if (rand == 0 && lv1Count < maxSerum[0]) {
+//       lv1Count++;
+//       await runV2(tokenId, serumV2[0]);
+//       tokenId++;
+//     } else if (rand == 1 && lv2Count < maxSerum[1]) {
+//       lv2Count++;
+//       await runV2(tokenId, serumV2[1]);
+//       tokenId++;
+//     } else if (rand == 2 && lv3Count < maxSerum[2]) {
+//       lv3Count++;
+//       await runV2(tokenId, serumV2[2]);
+//       tokenId++;
+//     } else {
+//       tokenId++;
+//       lv1Count == maxSerum[0]
+//         ? await runV2(tokenId, serumV2[1])
+//         : await runV2(tokenId, serumV2[0]);
+//       lv2Count == maxSerum[1]
+//         ? await runV2(tokenId, serumV2[2])
+//         : await runV2(tokenId, serumV2[1]);
 
-      if (lv3Count == maxSerum[2]) {
-        lv1Count == maxSerum[0]
-          ? await runV2(tokenId, serumV2[1])
-          : await runV2(tokenId, serumV2[0]);
-      }
-    }
-    now = lv1Count + lv2Count + lv3Count;
-  }
-  // for (let i = 1; i < len; i++) {
+//       if (lv3Count == maxSerum[2]) {
+//         lv1Count == maxSerum[0]
+//           ? await runV2(tokenId, serumV2[1])
+//           : await runV2(tokenId, serumV2[0]);
+//       }
+//     }
+//     now = lv1Count + lv2Count + lv3Count;
+//   }
+//   // for (let i = 1; i < len; i++) {
 
-  // }
+//   // }
 
-  const gen1Left = await getAllUnusedGen1();
-  const gen2Left = await getAllUnusedGen2();
+//   const gen1Left = await getAllUnusedGen1();
+//   const gen2Left = await getAllUnusedGen2();
 
-  logging(
-    `gen1 ที่เหลือ : ${gen1Left.length}\n
-    gen2 ที่เหลือ : ${gen2Left.length}\n
-    ใช้ serum lv 1 ไป : ${lv1Count}/${maxSerum[0]}\n
-    ใช้ serum lv 2 ไป : ${lv2Count}/${maxSerum[1]}\n
-    ใช้ serum lv 3 ไป : ${lv3Count}/${maxSerum[2]}\n`
-  );
-};
+//   logging(
+//     `gen1 ที่เหลือ : ${gen1Left.length}\n
+//     gen2 ที่เหลือ : ${gen2Left.length}\n
+//     ใช้ serum lv 1 ไป : ${lv1Count}/${maxSerum[0]}\n
+//     ใช้ serum lv 2 ไป : ${lv2Count}/${maxSerum[1]}\n
+//     ใช้ serum lv 3 ไป : ${lv3Count}/${maxSerum[2]}\n`
+//   );
+// };
 
 // migrate().then(() => testV2());
 // migrate().then(() => console.log("migrate successfully"));
