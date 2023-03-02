@@ -24,6 +24,26 @@ const abi = [
         name: "_stimulusTokenId",
         type: "uint256",
       },
+      { indexed: false, internalType: "address", name: "_to", type: "address" },
+    ],
+    name: "EmergencyWithdrawn",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_hostTokenId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_stimulusTokenId",
+        type: "uint256",
+      },
     ],
     name: "Fusioned",
     type: "event",
@@ -86,6 +106,16 @@ const abi = [
     ],
     name: "WithdrawLocked",
     type: "event",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "_hostTokenId", type: "uint256" },
+      { internalType: "address", name: "_to", type: "address" },
+    ],
+    name: "emergencyWithDraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [],

@@ -3,8 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const { runV2 } = require("./database/services/oppabear.service");
 const { logging } = require("./utils/logging");
-const { mutant, host, stimulus, labs } = require("./blockchain");
-const { ethers } = require("ethers");
+const { mutant, stimulus } = require("./blockchain");
+const { getTokenUri } = require("./utils/getTokenUri");
 
 // const options = {
 //   gasPrice: ethers.utils.parseUnits("20", "gwei"),
@@ -32,9 +32,13 @@ mutant.on(
 
     //TODO : get uri from serum for mainnet
     const stimulusUri = await stimulus.tokenURI(_serumTokenId);
-    const serum = JSON.parse(stimulusUri).attributes[0].value;
+    console.log(`getSerumURI : ${stimulusUri}`);
+    const serumURI = await getTokenUri(stimulusUri);
+    const serum = serumURI.attributes[0].value;
+    console.log(`serum type : ${serum}`);
+    const level = serum.split(".")[1];
 
-    const gen2TokenUri = await runV2(input.gen1TokenId, parseInt(serum));
+    const gen2TokenUri = await runV2(input.gen1TokenId, parseInt(level));
     const tx = await mutant
       .setBaseURI(input.gen2TokenId, gen2TokenUri)
       .catch((e) => console.log("err is here", e.message));

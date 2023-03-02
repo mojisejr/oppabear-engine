@@ -170,7 +170,7 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [{ internalType: "uint256", name: "_amount", type: "uint256" }],
     name: "mint",
     outputs: [],
     stateMutability: "nonpayable",
@@ -241,7 +241,7 @@ const abi = [
     inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
     name: "tokenURI",
     outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
+    stateMutability: "pure",
     type: "function",
   },
   {

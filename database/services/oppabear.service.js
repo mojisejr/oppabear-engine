@@ -486,7 +486,7 @@ const runV2 = async (oppaTokenId, serum) => {
 // };
 
 // migrate().then(() => testV2());
-// migrate().then(() => console.log("migrate successfully"));
+migrate().then(() => console.log("migrate successfully"));
 
 module.exports = {
   runV2,

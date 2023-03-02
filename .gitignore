@@ -11,6 +11,8 @@ logs.txt
 
 docker-compose.yml
 
+test.*
+
 
 log_backup_2.txt
 logs_backup.txt
