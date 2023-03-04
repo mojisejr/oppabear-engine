@@ -2,16 +2,17 @@ require("./database/postgres.database");
 require("dotenv").config();
 const express = require("express");
 const { runV2 } = require("./database/services/oppabear.service");
-const { logging } = require("./utils/logging");
-const { mutant, stimulus } = require("./blockchain");
-const { getTokenUri } = require("./utils/getTokenUri");
+const { log, LOG_TYPE } = require("./database/services/logging.service");
+const { labs } = require("./blockchain");
+const { getSerumLevel } = require("./helpers/getSerumLevel");
+const { setURI } = require("./helpers/setUri");
+const { mintToken } = require("./helpers/mintToken");
 
 // const options = {
 //   gasPrice: ethers.utils.parseUnits("20", "gwei"),
 //   gasLimit: 5500000,
 // };
 
-// const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.get("/", async (req, res) => {
@@ -20,45 +21,43 @@ app.get("/", async (req, res) => {
   });
 });
 
-mutant.on(
-  "Minted",
-  async (minter, _gen2TokenId, _gen1TokenId, _serumTokenId) => {
+labs.on("Fusioned", async (minter, _gen1TokenId, _serumTokenId) => {
+  try {
     const input = {
       minter,
-      gen2TokenId: _gen2TokenId.toString(),
       gen1TokenId: _gen1TokenId.toString(),
       serumTokenId: _serumTokenId.toString(),
     };
 
     //TODO : get uri from serum for mainnet
-    const stimulusUri = await stimulus.tokenURI(_serumTokenId);
-    console.log(`getSerumURI : ${stimulusUri}`);
-    const serumURI = await getTokenUri(stimulusUri);
-    const serum = serumURI.attributes[0].value;
-    console.log(`serum type : ${serum}`);
-    const level = serum.split(".")[1];
-
-    const gen2TokenUri = await runV2(input.gen1TokenId, parseInt(level));
-    const tx = await mutant
-      .setBaseURI(input.gen2TokenId, gen2TokenUri)
-      .catch((e) => console.log("err is here", e.message));
-    logging(
-      `${minter} | minted with ${input.gen1TokenId} + ${input.serumTokenId} => ${input.gen1TokenId} [${gen2TokenUri}]\n tx: ${tx.hash} \n`
+    const level = await getSerumLevel(minter, _serumTokenId);
+    const gen2 = await runV2(input.gen1TokenId, parseInt(level));
+    const uriTx = await setURI(gen2, input.gen1TokenId, input.serumTokenId);
+    const mintTx = await mintToken(
+      minter,
+      gen2,
+      input.gen1TokenId,
+      input.serumTokenId
     );
-    console.log(
-      `${minter} | minted with ${input.gen1TokenId} + ${input.serumTokenId} => ${input.gen1TokenId} [${gen2TokenUri}]\n tx: ${tx.hash} \n`
+    log(
+      "EVENT_FUSION",
+      `Successfully : BaseURI_Tx : ${uriTx.hash}, Minting_Tx: ${mintTx.hash}`,
+      minter,
+      LOG_TYPE.INFO
     );
-    //TODO:
-    //save transaction hash and timestamp to database
+  } catch (error) {
+    log("EVENT_FUSION", `ERROR : ${error.message}`, minter, LOG_TYPE.ERROR);
   }
-);
+});
 
 process.on("uncaughtException", (error) => {
   console.log(error);
+  log("UNCAUGHT", `uncaughtException`, "0x00", LOG_TYPE.ERROR);
   console.log("uncaught error");
 });
 process.on("unhandledRejection", (error) => {
   console.log(error);
+  log("UNHANDLE", `unhandledRejection`, "0x00", LOG_TYPE.ERROR);
   console.log("unhandle rejection");
 });
 

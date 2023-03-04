@@ -408,21 +408,21 @@ const runV2 = async (oppaTokenId, serum) => {
       logging(`=== oppatoken ${oppaTokenId} : with serum ${serum} ===\n`);
       gen2Output = await serumLv1Algorithm(gen1Input);
       if (gen2Output) {
-        return gen2Output.ipfs;
+        return gen2Output;
       }
       break;
     case 2:
       logging(`=== oppatoken ${oppaTokenId} : with serum ${serum} ===\n`);
       gen2Output = await serumLv2Algorithm(gen1Input);
       if (gen2Output) {
-        return gen2Output.ipfs;
+        return gen2Output;
       }
       break;
     case 3:
       logging(`=== oppatoken ${oppaTokenId} : with serum ${serum} ===\n`);
       gen2Output = await serumLv3Algorithm(gen1Input);
       if (gen2Output) {
-        return gen2Output.ipfs;
+        return gen2Output;
       }
   }
 };
@@ -486,7 +486,6 @@ const runV2 = async (oppaTokenId, serum) => {
 // };
 
 // migrate().then(() => testV2());
-migrate().then(() => console.log("migrate successfully"));
 
 module.exports = {
   runV2,

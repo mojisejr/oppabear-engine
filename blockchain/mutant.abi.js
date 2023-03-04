@@ -4,20 +4,6 @@ const abi = [
     stateMutability: "nonpayable",
     type: "constructor",
   },
-  { inputs: [], name: "ApprovalCallerNotOwnerNorApproved", type: "error" },
-  { inputs: [], name: "ApprovalQueryForNonexistentToken", type: "error" },
-  { inputs: [], name: "BalanceQueryForZeroAddress", type: "error" },
-  { inputs: [], name: "InvalidQueryRange", type: "error" },
-  { inputs: [], name: "MintERC2309QuantityExceedsLimit", type: "error" },
-  { inputs: [], name: "MintToZeroAddress", type: "error" },
-  { inputs: [], name: "MintZeroQuantity", type: "error" },
-  { inputs: [], name: "OwnerQueryForNonexistentToken", type: "error" },
-  { inputs: [], name: "OwnershipNotInitializedForExtraData", type: "error" },
-  { inputs: [], name: "TransferCallerNotOwnerNorApproved", type: "error" },
-  { inputs: [], name: "TransferFromIncorrectOwner", type: "error" },
-  { inputs: [], name: "TransferToNonERC721ReceiverImplementer", type: "error" },
-  { inputs: [], name: "TransferToZeroAddress", type: "error" },
-  { inputs: [], name: "URIQueryForNonexistentToken", type: "error" },
   {
     anonymous: false,
     inputs: [
@@ -67,21 +53,14 @@ const abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "uint256",
-        name: "fromTokenId",
-        type: "uint256",
-      },
-      {
         indexed: false,
         internalType: "uint256",
-        name: "toTokenId",
+        name: "_tokenId",
         type: "uint256",
       },
-      { indexed: true, internalType: "address", name: "from", type: "address" },
-      { indexed: true, internalType: "address", name: "to", type: "address" },
+      { indexed: false, internalType: "address", name: "_to", type: "address" },
     ],
-    name: "ConsecutiveTransfer",
+    name: "ForceMinted",
     type: "event",
   },
   {
@@ -92,18 +71,6 @@ const abi = [
         indexed: true,
         internalType: "uint256",
         name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_hostTokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_stimulusTokenId",
         type: "uint256",
       },
     ],
@@ -216,20 +183,13 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "START_TOKEN_ID",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       { internalType: "address", name: "to", type: "address" },
       { internalType: "uint256", name: "tokenId", type: "uint256" },
     ],
     name: "approve",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -240,43 +200,13 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "explicitOwnershipOf",
-    outputs: [
-      {
-        components: [
-          { internalType: "address", name: "addr", type: "address" },
-          { internalType: "uint64", name: "startTimestamp", type: "uint64" },
-          { internalType: "bool", name: "burned", type: "bool" },
-          { internalType: "uint24", name: "extraData", type: "uint24" },
-        ],
-        internalType: "struct IERC721A.TokenOwnership",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
-      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
+      { internalType: "address", name: "_to", type: "address" },
+      { internalType: "uint256", name: "_tokenId", type: "uint256" },
     ],
-    name: "explicitOwnershipsOf",
-    outputs: [
-      {
-        components: [
-          { internalType: "address", name: "addr", type: "address" },
-          { internalType: "uint64", name: "startTimestamp", type: "uint64" },
-          { internalType: "bool", name: "burned", type: "bool" },
-          { internalType: "uint24", name: "extraData", type: "uint24" },
-        ],
-        internalType: "struct IERC721A.TokenOwnership[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
+    name: "forceMint",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -304,44 +234,6 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
-    name: "getInfo",
-    outputs: [
-      {
-        components: [
-          { internalType: "uint256", name: "hostId", type: "uint256" },
-          { internalType: "uint256", name: "stimulusId", type: "uint256" },
-          { internalType: "string", name: "baseURI", type: "string" },
-          { internalType: "bool", name: "completed", type: "bool" },
-        ],
-        internalType: "struct OppabearEvolutionGen2.Oppabear",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getInfos",
-    outputs: [
-      {
-        components: [
-          { internalType: "uint256", name: "hostId", type: "uint256" },
-          { internalType: "uint256", name: "stimulusId", type: "uint256" },
-          { internalType: "string", name: "baseURI", type: "string" },
-          { internalType: "bool", name: "completed", type: "bool" },
-        ],
-        internalType: "struct OppabearEvolutionGen2.Oppabear[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       { internalType: "address", name: "owner", type: "address" },
       { internalType: "address", name: "operator", type: "address" },
@@ -353,7 +245,14 @@ const abi = [
   },
   {
     inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
-    name: "isCompleted",
+    name: "isHasBaseURI",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
+    name: "isMinted",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
@@ -361,8 +260,7 @@ const abi = [
   {
     inputs: [
       { internalType: "address", name: "_to", type: "address" },
-      { internalType: "uint256", name: "_hostTokenId", type: "uint256" },
-      { internalType: "uint256", name: "_stimulusTokenId", type: "uint256" },
+      { internalType: "uint256", name: "_tokenId", type: "uint256" },
     ],
     name: "mint",
     outputs: [],
@@ -426,7 +324,7 @@ const abi = [
     ],
     name: "safeTransferFrom",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -434,11 +332,11 @@ const abi = [
       { internalType: "address", name: "from", type: "address" },
       { internalType: "address", name: "to", type: "address" },
       { internalType: "uint256", name: "tokenId", type: "uint256" },
-      { internalType: "bytes", name: "_data", type: "bytes" },
+      { internalType: "bytes", name: "data", type: "bytes" },
     ],
     name: "safeTransferFrom",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -476,6 +374,23 @@ const abi = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "uint256", name: "index", type: "uint256" }],
+    name: "tokenByIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "owner", type: "address" },
+      { internalType: "uint256", name: "index", type: "uint256" },
+    ],
+    name: "tokenOfOwnerByIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
     name: "tokenURI",
     outputs: [{ internalType: "string", name: "", type: "string" }],
@@ -483,19 +398,8 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+    inputs: [{ internalType: "address", name: "_owner", type: "address" }],
     name: "tokensOfOwner",
-    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "owner", type: "address" },
-      { internalType: "uint256", name: "start", type: "uint256" },
-      { internalType: "uint256", name: "stop", type: "uint256" },
-    ],
-    name: "tokensOfOwnerIn",
     outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
     stateMutability: "view",
     type: "function",
@@ -515,7 +419,7 @@ const abi = [
     ],
     name: "transferFrom",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

@@ -14,14 +14,7 @@
   "scripts": {
     "start": "node index.js",
     "generate": "node index.js",
-    "rarity": "node utils/rarity.js",
-    "preview": "node utils/preview.js",
-    "pixelate": "node utils/pixelate.js",
-    "update_info": "node utils/update_info.js",
-    "preview_gif": "node utils/preview_gif.js",
-    "generate_metadata": "node utils/generate_metadata.js",
-    "check_duplicate": "node utils/check_duplicate.js",
-    "migrate": "node database/services/oppabear.service.js"
+    "migrate": "node helpers/migration.js"
   },
   "author": "non",
   "license": "MIT",
