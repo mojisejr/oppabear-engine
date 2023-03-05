@@ -62,9 +62,23 @@ labs.on("Fusioned", async (minter, _gen1TokenId, _serumTokenId) => {
 });
 
 mutant.on("SetBaseURI", async (tokenId, baseUri, owner) => {
-  console.log("base URI set! minting token..");
-  const mintTx = await mintToken(owner, tokenId.toString());
-  console.log("mintTx: ", mintTx.hash);
+  try {
+    const mintTx = await mintToken(owner, tokenId.toString());
+    log(
+      "EVENT_BASEURI",
+      `tokenId #${tokenId.toString()} has been minted.`,
+      owner,
+      LOG_TYPE.INFO
+    );
+    console.log("mintTx: ", mintTx.hash);
+  } catch (error) {
+    log(
+      "EVENT_BASEURI",
+      `tokenId #${tokenId.toString()} minting failed, ${error.message}`,
+      owner,
+      LOG_TYPE.ERROR
+    );
+  }
 });
 
 process.on("uncaughtException", (error) => {

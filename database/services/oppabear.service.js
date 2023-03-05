@@ -226,6 +226,8 @@ const serumLv1Algorithm = async (oppabearGen1) => {
       );
     }
   }
+  console.log("mark as used gen1 : ", gen1Input.name);
+  console.log("mark as used gen2 : ", gen2Output.name);
   await markUsedGen1(gen1Input.name);
   await markUsedGen2(gen2Output.name);
   return gen2Output;
@@ -424,6 +426,7 @@ const runV2 = async (oppaTokenId, serum) => {
       if (gen2Output) {
         return gen2Output;
       }
+      break;
   }
 };
 
