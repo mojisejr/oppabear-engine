@@ -1,9 +1,9 @@
 const { mutant } = require("../blockchain");
 const { log, LOG_TYPE } = require("../database/services/logging.service");
 
-async function setURI(gen2, gen1TokenId, serumTokenId) {
+async function setURI(gen2, gen1TokenId, serumTokenId, minter) {
   const setBaseURITx = await mutant
-    .setBaseURI(gen2.edition, gen2.ipfs)
+    .setBaseURI(gen2.name, gen2.ipfs, minter)
     .catch((e) => {
       log(
         "EVENT_FUSION",

@@ -6,7 +6,7 @@ const LOG_TYPE = {
 };
 
 async function log(fn, message, caller, type = LOG_TYPE.ERROR) {
-  await Log.create({ fn, type, message, caller });
+  await Log.create({ function: fn, type, message, caller });
 }
 
 module.exports = {

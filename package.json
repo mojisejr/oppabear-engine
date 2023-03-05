@@ -14,7 +14,8 @@
   "scripts": {
     "start": "node index.js",
     "generate": "node index.js",
-    "migrate": "node helpers/migration.js"
+    "migrate": "node helpers/migration.js",
+    "reset": "node helpers/resetDB.js"
   },
   "author": "non",
   "license": "MIT",
