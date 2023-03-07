@@ -5,7 +5,10 @@ const { runV2 } = require("./database/services/oppabear.service");
 const { log, LOG_TYPE } = require("./database/services/logging.service");
 const { labs, mutant } = require("./blockchain");
 // const { getSerumLevel } = require("./helpers/getSerumLevel");
-const { getSerumLevelById } = require("./database/services/serum.service");
+const {
+  getSerumLevelById,
+  markSerumAsUsed,
+} = require("./database/services/serum.service");
 const { setURI } = require("./helpers/setUri");
 const { mintToken } = require("./helpers/mintToken");
 
@@ -46,6 +49,8 @@ labs.on("Fusioned", async (minter, _gen1TokenId, _serumTokenId) => {
       input.minter
     ).catch((error) => console.log(error));
     console.log("uriTx : ", tx.hash);
+    ///MARK SERUM AS USED
+    await markSerumAsUsed(input.serumTokenId);
 
     log(
       "EVENT_FUSION",
