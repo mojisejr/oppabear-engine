@@ -4,7 +4,8 @@ const express = require("express");
 const { runV2 } = require("./database/services/oppabear.service");
 const { log, LOG_TYPE } = require("./database/services/logging.service");
 const { labs, mutant } = require("./blockchain");
-const { getSerumLevel } = require("./helpers/getSerumLevel");
+// const { getSerumLevel } = require("./helpers/getSerumLevel");
+const { getSerumLevelById } = require("./database/services/serum.service");
 const { setURI } = require("./helpers/setUri");
 const { mintToken } = require("./helpers/mintToken");
 
@@ -31,9 +32,10 @@ labs.on("Fusioned", async (minter, _gen1TokenId, _serumTokenId) => {
     console.log("input: ", input);
 
     //TODO : get uri from serum for mainnet
-    const level = await getSerumLevel(minter, _serumTokenId).catch((e) =>
-      console.log("seurm ipfs : ", e.message)
-    );
+    // const level = await getSerumLevel(minter, _serumTokenId).catch((e) =>
+    //   console.log("seurm ipfs : ", e.message)
+    // );
+    const level = await getSerumLevelById(input.serumTokenId);
     console.log("serum level: ", level);
     const gen2 = await runV2(input.gen1TokenId, parseInt(level));
     console.log("gen2: ", gen2);

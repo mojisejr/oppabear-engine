@@ -1,58 +1,7 @@
 const OppaGen1 = require("../models/oppagen1.model");
 const OppaGen2 = require("../models/oppagen2.model");
 const { Op } = require("sequelize");
-const gen1Path = `${process.cwd()}/database/migrate/gen1.csv`;
-const gen2Path = `${process.cwd()}/database/migrate/gen2.csv`;
-const csvtojson = require("csvtojson");
 const { logging } = require("../../utils/logging");
-
-const baseIpfs =
-  // "ipfs://bafybeid5uiefrwxejqqii6bemh2tsos5hzqxrzl5ieyulg26ugmm2eq26a";
-  "ipfs://bafybeiefz3zwhro2v25yug5f6zhodjmezhpckthaoof4vzenlhx2l35vra";
-
-const migrate = async () => {
-  // OppaGen1.drop();
-  // OppaGen2.drop();
-  const gen1 = await csvtojson().fromFile(gen1Path);
-  const gen2 = await csvtojson().fromFile(gen2Path);
-  const gen1Data = gen1.map((g) => {
-    return {
-      rank: g._rank,
-      name: g._name.split("#")[1],
-      body: g.Body.toLowerCase().replace(" ", ""),
-      score: g._score,
-      rarity: getRarity(g._score),
-      used: false,
-    };
-  });
-
-  const gen2Data = gen2.map((g) => {
-    return {
-      rank: g._rank,
-      name: g._name.split("#")[1],
-      body: g.Body.toLowerCase().replace(" ", ""),
-      score: g._score / 2.5,
-      rarity: getRarity(g._score / 2.5),
-      used: false,
-      ipfs: `${baseIpfs}/${g._name.split("#")[1]}.json`,
-    };
-  });
-
-  await OppaGen1.bulkCreate(gen1Data).catch((e) => console.log(e));
-  await OppaGen2.bulkCreate(gen2Data).catch((e) => console.log(e));
-};
-
-const getRarity = (score) => {
-  if (score < 500) {
-    return 1;
-  } else if (score > 500 && score < 1000) {
-    return 2;
-  } else if (score > 1000 && score < 2000) {
-    return 3;
-  } else if (score == 2000) {
-    return 4;
-  }
-};
 
 const getGen1ById = async (tokenId) => {
   const result = await OppaGen1.findOne({ where: { name: tokenId } }).catch(
@@ -429,66 +378,6 @@ const runV2 = async (oppaTokenId, serum) => {
       break;
   }
 };
-
-// const testV2 = async () => {
-//   let len = 1501;
-//   let serumV2 = [1, 2, 3];
-//   let maxSerum = [600, 300, 100];
-//   let lv1Count = 0;
-//   let lv2Count = 0;
-//   let lv3Count = 0;
-//   let total = 1000;
-//   let now = 0;
-//   let tokenId = 1;
-//   while (now < total) {
-//     console.log("round: ", now);
-//     let rand = Math.floor(Math.random() * 9999 + lv1Count) % 3;
-//     if (rand == 0 && lv1Count < maxSerum[0]) {
-//       lv1Count++;
-//       await runV2(tokenId, serumV2[0]);
-//       tokenId++;
-//     } else if (rand == 1 && lv2Count < maxSerum[1]) {
-//       lv2Count++;
-//       await runV2(tokenId, serumV2[1]);
-//       tokenId++;
-//     } else if (rand == 2 && lv3Count < maxSerum[2]) {
-//       lv3Count++;
-//       await runV2(tokenId, serumV2[2]);
-//       tokenId++;
-//     } else {
-//       tokenId++;
-//       lv1Count == maxSerum[0]
-//         ? await runV2(tokenId, serumV2[1])
-//         : await runV2(tokenId, serumV2[0]);
-//       lv2Count == maxSerum[1]
-//         ? await runV2(tokenId, serumV2[2])
-//         : await runV2(tokenId, serumV2[1]);
-
-//       if (lv3Count == maxSerum[2]) {
-//         lv1Count == maxSerum[0]
-//           ? await runV2(tokenId, serumV2[1])
-//           : await runV2(tokenId, serumV2[0]);
-//       }
-//     }
-//     now = lv1Count + lv2Count + lv3Count;
-//   }
-//   // for (let i = 1; i < len; i++) {
-
-//   // }
-
-//   const gen1Left = await getAllUnusedGen1();
-//   const gen2Left = await getAllUnusedGen2();
-
-//   logging(
-//     `gen1 ที่เหลือ : ${gen1Left.length}\n
-//     gen2 ที่เหลือ : ${gen2Left.length}\n
-//     ใช้ serum lv 1 ไป : ${lv1Count}/${maxSerum[0]}\n
-//     ใช้ serum lv 2 ไป : ${lv2Count}/${maxSerum[1]}\n
-//     ใช้ serum lv 3 ไป : ${lv3Count}/${maxSerum[2]}\n`
-//   );
-// };
-
-// migrate().then(() => testV2());
 
 module.exports = {
   runV2,
